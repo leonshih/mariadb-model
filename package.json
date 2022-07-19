@@ -1,0 +1,23 @@
+{
+  "name": "mariadb-model",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.ts",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "author": "Leon Shih",
+  "license": "ISC",
+  "dependencies": {
+    "camelcase-keys": "^7.0.2",
+    "dotenv": "^16.0.1",
+    "mariadb": "^3.0.0",
+    "snakecase-keys": "^5.4.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.20.0",
+    "eslint-plugin-jest": "^26.6.0",
+    "eslint-plugin-markdown": "^3.0.0",
+    "jest": "^28.1.3"
+  }
+}
