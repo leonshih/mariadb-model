@@ -181,8 +181,8 @@ await usersModel.find({},
 );
 ```
 
-### insert
-新增單筆或多筆資料
+## insert
+- 新增單筆或多筆資料
 ```javascript
 await userModel.insert({
     uid,
@@ -191,8 +191,8 @@ await userModel.insert({
 });
 ```
 
-### update
-更新資料
+## update
+- 更新資料
 ```javascript
 await userModel.update({
     name // 更新欄位值
@@ -204,8 +204,8 @@ await userModel.update({
 })
 ```
 
-### markDeleted
-標示為已刪除
+## markDeleted
+- 標示為已刪除
 ```javascript
 await userModel.markDeleted({
     uid // 查詢條件
@@ -214,7 +214,7 @@ await userModel.markDeleted({
 })
 ```
 
-### delete
+## delete
 實際刪除DB資料
 ```javascript
 await userModel.delete({
