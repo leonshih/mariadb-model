@@ -181,6 +181,15 @@ await usersModel.find({},
 );
 ```
 
+- Paranoid (是否為軟刪除)
+```javascript
+await userModel.find({}, {
+    paranoid: false
+});
+
+// [{ ..., deleted: true }]
+```
+
 ## insert
 - 新增單筆或多筆資料
 ```javascript

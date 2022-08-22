@@ -1,7 +1,10 @@
 const mariadb = require('mariadb');
 const snakecaseKeys = require('snakecase-keys');
 const camelCaseKeys = require('camelcase-keys');
+const logger = require('../logger');
 
+const camelToSnakeCase = (str) =>
+  str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 class Model {
   constructor() {
     this.table = '';
@@ -24,7 +27,7 @@ class Model {
       const conn = await pool.getConnection();
       return conn;
     } catch (err) {
-      console.log(`Database connection failed. ${err.message}`);
+      logger.error(`Database connection failed. ${err.message}`);
       process.exit(1);
     } finally {
       pool.end();
@@ -54,6 +57,7 @@ class Model {
    * @param {String} projection.gt[].value 大於的參數值
    * @param {String} projection.lt[].param 小於的參數名稱
    * @param {String} projection.lt[].value 小於的參數值
+   * @param {boolean} projection.paranoid 是否為軟刪除
    * @returns {array}
    * @example
    * await usersModel.find(
@@ -138,6 +142,7 @@ class Model {
    * @param {String} projection.gt[].value 大於的參數值
    * @param {String} projection.lt[].param 小於的參數名稱
    * @param {String} projection.lt[].value 小於的參數值
+   * @param {boolean} projection.paranoid 是否為軟刪除
    * @returns {array}
    * @example
    * await usersModel.findOne(
@@ -441,6 +446,7 @@ class Model {
    * @param {String} projection.gt[].value 大於的參數值
    * @param {String} projection.lt[].param 小於的參數名稱
    * @param {String} projection.lt[].value 小於的參數值
+   * @param {boolean} projection.paranoid 是否為軟刪除
    * @example
    * 
      usersModel.getWhereQuery(
@@ -454,7 +460,7 @@ class Model {
     );
    */
   getWhereQuery(conditions, projection = {}) {
-    const { like, gte, lte, gt, lt, contains } = projection;
+    const { like, gte, lte, gt, lt, contains, paranoid } = projection;
     let whereQuery = ' WHERE 1=1';
 
     if (Object.keys(conditions).length > 0) {
@@ -530,7 +536,7 @@ class Model {
         .join(' AND ')}`;
     }
 
-    if (this.tableColumns.general.includes('deleted')) {
+    if (this.tableColumns.general.includes('deleted') && paranoid !== false) {
       whereQuery += ` AND ${this.table}.deleted = 0`;
     }
     return whereQuery;
@@ -623,7 +629,7 @@ class Model {
       const result = await conn.query(sql);
       return result[0].uid;
     } catch (err) {
-      console.log(`Database connection failed. ${err.message}`);
+      logger.error(`Database connection failed. ${err.message}`);
       process.exit(1);
     } finally {
       conn.release();
@@ -636,8 +642,5 @@ class Model {
       : `${this.table}.${camelToSnakeCase(param)} = ?`;
   }
 }
-
-const camelToSnakeCase = (str) =>
-  str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 
 module.exports = Model;
