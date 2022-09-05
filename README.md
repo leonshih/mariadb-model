@@ -193,11 +193,13 @@ await userModel.find({}, {
 ## insert
 - 新增單筆或多筆資料
 ```javascript
-await userModel.insert({
+const user = userModel.create({
     uid,
     name,
     ...
 });
+
+await userModel.insert(user);
 ```
 
 ## update
