@@ -77,7 +77,7 @@ module.exports = UsersModel;
 const conn = await userModel.getConnection();
 conn.beginTransaction();
 
-await userModel.insert({})
+await userModel.insert({}, conn)
 
 try {
     conn.commit();
